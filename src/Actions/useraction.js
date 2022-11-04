@@ -6,7 +6,10 @@ import axios from "axios";
 
 export const login = (data, callback) => {
   console.log(data);
-  const request = axios.post(`http://localhost:4000/userlogin`, data);
+  const request = axios.post(
+    `https://mytaskbackendserver.herokuapp.com/userlogin`,
+    data
+  );
   return (dispatch) => {
     request
       .then((res) => {
@@ -26,7 +29,10 @@ export const login = (data, callback) => {
 export const register = (data, callback) => {
   console.log(data);
 
-  const request = axios.post("http://localhost:4000/usersignup", data);
+  const request = axios.post(
+    "https://mytaskbackendserver.herokuapp.com/usersignup",
+    data
+  );
   return (dispatch) => {
     request
       .then((res) => {
