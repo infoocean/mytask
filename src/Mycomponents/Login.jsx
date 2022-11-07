@@ -10,7 +10,7 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { login } from "../Actions/useraction";
 import { connect } from "react-redux";
@@ -29,7 +29,7 @@ class Login extends Component {
               <Stack spacing={4}>
                 <Formik
                   initialValues={{
-                    email: localStorage.getItem('email'),
+                    email: localStorage.getItem("email"),
                     password: "",
                   }}
                   validate={(values) => {
@@ -60,8 +60,11 @@ class Login extends Component {
                       password: values.password,
                     };
                     this.props.login(reqdata, (response) => {
-                      if (response) {
+                      if (response.status === 200) {
                         toast.success("Login Successfull !");
+                        resetForm({ values: "" });
+                      } else {
+                        toast.success("invalid crendentials!");
                         resetForm({ values: "" });
                       }
                     });

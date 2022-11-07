@@ -1,20 +1,18 @@
+import axios from "axios";
+import env from "react-dotenv";
 import {
   USER_LOGIN_SUCCESS,
   USER_REGISTER_SUCCESS,
 } from "../Constant/usercontant";
-import axios from "axios";
+
+const server_root = process.env.BASE_URL_SERVER;
 
 export const login = (data, callback) => {
-  console.log(data);
-  const request = axios.post(
-    `https://mytaskbackendserver.herokuapp.com/userlogin`,
-    data
-  );
+  const request = axios.post(`http://localhost:4000/userlogin`, data);
   return (dispatch) => {
     request
       .then((res) => {
         callback(res);
-        console.log(res);
         dispatch({
           type: USER_LOGIN_SUCCESS,
           payload: res.data,
@@ -27,12 +25,7 @@ export const login = (data, callback) => {
 };
 
 export const register = (data, callback) => {
-  console.log(data);
-
-  const request = axios.post(
-    "https://mytaskbackendserver.herokuapp.com/usersignup",
-    data
-  );
+  const request = axios.post(`http://localhost:4000/usersignup`, data);
   return (dispatch) => {
     request
       .then((res) => {
@@ -43,10 +36,7 @@ export const register = (data, callback) => {
         });
       })
       .catch(function (error) {
-        // apiErrors(error);
         callback(error);
       });
   };
 };
-
-export function getEmail(data, callback) {}

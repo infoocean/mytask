@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import {
   Flex,
   Box,
@@ -12,12 +12,12 @@ import {
   HStack,
   Select,
 } from "@chakra-ui/react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { calling_code } from "../API/countrycodes";
 import { register } from "../Actions/useraction";
 import { connect } from "react-redux";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 class Register extends Component {
@@ -84,29 +84,30 @@ class Register extends Component {
                     }
                     return errors;
                   }}
-                  onSubmit={async (values, { setSubmitting }) => {
+                  onSubmit={async (values, { setSubmitting, resetForm }) => {
                     //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
-                    localStorage.clear();
-
                     const reqdata = {
                       firstname: values.firstname,
                       lastname: values.lastname,
                       email: values.email,
-                      password: values.password,
                       number: values.number,
+                      password: values.password,
+                      confirmpassword: values.confirmpassword,
                     };
-                    localStorage.setItem("email", values.email);
                     this.props.register(reqdata, (response) => {
-                      if (response) {
-                        console.log(response.data);
-                        setTimeout(() => {
-                          window.location.replace("/loginpage");
-                        }, 3000);
+                      //console.log(response);
+                      //console.log(response.status);
+                      if (response.status === 200) {
+                        toast.success("Email allready registred");
+                      } else if (response.status === 201) {
                         toast.success("Registration Successfull !");
+                        resetForm({ values: "" });
                       }
-                      //console.log(response.email, "fgsdfgsd");
+                      if (response.status === 500) {
+                        toast.success("server not responding");
+                      }
                     });
                     setSubmitting(false);
                   }}
