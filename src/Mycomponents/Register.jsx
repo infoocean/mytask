@@ -121,6 +121,7 @@ class Register extends Component {
                         Navigate("/loginpage");
                       }
                       if (response.status === 500) {
+                        this.setState({ showsnipper: true });
                         toast.success("server not responding");
                       }
                     });
