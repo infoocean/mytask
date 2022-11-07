@@ -29,7 +29,7 @@ class Login extends Component {
               <Stack spacing={4}>
                 <Formik
                   initialValues={{
-                    email: localStorage.getItem("email"),
+                    email: "",
                     password: "",
                   }}
                   validate={(values) => {
@@ -65,7 +65,7 @@ class Login extends Component {
                         resetForm({ values: "" });
                       } else {
                         toast.success("invalid crendentials!");
-                        resetForm({ values: "" });
+                        //resetForm({ values: "" });
                       }
                     });
                     setSubmitting(false);
