@@ -10,15 +10,15 @@ import {
   Heading,
   Text,
   HStack,
-  Select,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { Formik } from "formik";
-import { calling_code } from "../API/countrycodes";
-import { register } from "../Actions/useraction";
+import { register, emailstore } from "../Actions/useraction";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import PhoneInput from "react-phone-input-2";
+// import "react-phone-input-2/lib/style.css";
 
 class Register extends Component {
   render() {
@@ -58,12 +58,10 @@ class Register extends Component {
                     ) {
                       errors.email = "Invalid email address **";
                     }
-                    // if (!values.countrycode) {
-                    //   errors.countrycode = " required country code**";
+                    // if (!values.number) {
+                    //   errors.number = " number required **";
                     // }
-                    if (!values.number) {
-                      errors.number = " number required **";
-                    }
+
                     const strongRegex = new RegExp(
                       "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{10,})"
                     );
@@ -102,7 +100,9 @@ class Register extends Component {
                       if (response.status === 200) {
                         toast.success("Email allready registred");
                       } else if (response.status === 201) {
+                        this.props.emailstore(values.email, (res) => {});
                         toast.success("Registration Successfull !");
+                        Navigate("/loginpage");
                         resetForm({ values: "" });
                       }
                       if (response.status === 500) {
@@ -194,52 +194,12 @@ class Register extends Component {
                         </span>
                       </FormControl>
 
-                      <HStack>
-                        <FormControl id="country code" mt={2}>
-                          <FormLabel>Country Code</FormLabel>
-                          <Select>
-                            {calling_code.map((item, key) => {
-                              return (
-                                <option value={item.code}>
-                                  {item.name + " " + item.code}
-                                </option>
-                              );
-                            })}
-                          </Select>
-                          <span
-                            style={{
-                              color: "red",
-                              fontSize: "13px",
-                              paddingBottom: "10px",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {errors.countrycode &&
-                              touched.countrycode &&
-                              errors.countrycode}
-                          </span>
-                        </FormControl>
+                      {/* <HStack>
                         <FormControl id="number" mt={2}>
                           <FormLabel>Phone Number</FormLabel>
-                          <Input
-                            type="text"
-                            name="number"
-                            value={values.number}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                          />
-                          <span
-                            style={{
-                              color: "red",
-                              fontSize: "13px",
-                              paddingBottom: "10px",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {errors.number && touched.number && errors.number}
-                          </span>
+                          <PhoneInput country={"in"} value={values.number} />
                         </FormControl>
-                      </HStack>
+                      </HStack> */}
 
                       <FormControl id="password" mt={2}>
                         <FormLabel>Password</FormLabel>
@@ -326,4 +286,5 @@ const mapDispatchToProps = (store) => {
 };
 export default connect(mapDispatchToProps, {
   register,
+  emailstore,
 })(Register);

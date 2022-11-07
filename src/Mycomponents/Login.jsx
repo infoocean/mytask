@@ -13,11 +13,17 @@ import {
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { login } from "../Actions/useraction";
+import { emailstore } from "../Actions/useraction";
 import { connect } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 class Login extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
+    console.log(this.props.userLoginReducer.userInfo);
+
     return (
       <>
         <Flex minH={"100vh"} align={"center"} justify={"center"}>
@@ -29,7 +35,7 @@ class Login extends Component {
               <Stack spacing={4}>
                 <Formik
                   initialValues={{
-                    email: "",
+                    email: this.props.userLoginReducer.userInfo,
                     password: "",
                   }}
                   validate={(values) => {
@@ -163,6 +169,8 @@ const mapDispatchToProps = (store) => {
   var registerData = store;
   return registerData;
 };
+
 export default connect(mapDispatchToProps, {
   login,
+  emailstore,
 })(Login);

@@ -3,6 +3,7 @@ import env from "react-dotenv";
 import {
   USER_LOGIN_SUCCESS,
   USER_REGISTER_SUCCESS,
+  EMAIL_SAVE,
 } from "../Constant/usercontant";
 
 const server_root = process.env.BASE_URL_SERVER;
@@ -38,5 +39,15 @@ export const register = (data, callback) => {
       .catch(function (error) {
         callback(error);
       });
+  };
+};
+
+export const emailstore = (email) => {
+  //console.log(email);
+  return (dispatch) => {
+    dispatch({
+      type: EMAIL_SAVE,
+      payload: email,
+    });
   };
 };
