@@ -80,6 +80,7 @@ class Login extends Component {
                         this.setState({ showsnipper: false });
                         //resetForm({ values: "" });
                       }
+                      this.setState({ showsnipper: false });
                     });
                     setSubmitting(false);
                   }}

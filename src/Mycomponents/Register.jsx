@@ -45,7 +45,7 @@ class Register extends Component {
                     email: "",
                     password: "",
                     confirmpassword: "",
-                    countrycode: "India +91",
+                    countrycode: "+91",
                     number: "",
                   }}
                   validate={(values) => {
@@ -121,9 +121,10 @@ class Register extends Component {
                         Navigate("/loginpage");
                       }
                       if (response.status === 500) {
-                        this.setState({ showsnipper: true });
+                        this.setState({ showsnipper: false });
                         toast.success("server not responding");
                       }
+                      this.setState({ showsnipper: false });
                     });
                     setSubmitting(false);
                   }}
