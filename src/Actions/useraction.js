@@ -7,9 +7,11 @@ import {
 } from "../Constant/usercontant";
 
 const server_root = process.env.BASE_URL_SERVER;
+loginendpoint = "userlogin";
+registrationendpoint = "usersignup";
 
 export const login = (data, callback) => {
-  const request = axios.post(`http://localhost:4000/userlogin`, data);
+  const request = axios.post(server_root + loginendpoint, data);
   return (dispatch) => {
     request
       .then((res) => {
@@ -26,7 +28,7 @@ export const login = (data, callback) => {
 };
 
 export const register = (data, callback) => {
-  const request = axios.post(`http://localhost:4000/usersignup`, data);
+  const request = axios.post(server_root + registrationendpoint, data);
   return (dispatch) => {
     request
       .then((res) => {

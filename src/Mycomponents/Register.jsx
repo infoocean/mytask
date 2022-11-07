@@ -10,6 +10,7 @@ import {
   Heading,
   Text,
   HStack,
+  Spinner,
 } from "@chakra-ui/react";
 import { Link, Navigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -17,10 +18,16 @@ import { register, emailstore } from "../Actions/useraction";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import PhoneInput from "react-phone-input-2";
-// import "react-phone-input-2/lib/style.css";
+import { calling_code } from "../API/countrycodes";
+
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 class Register extends Component {
+  state = {
+    showsnipper: false,
+  };
+
   render() {
     return (
       <>
@@ -38,7 +45,7 @@ class Register extends Component {
                     email: "",
                     password: "",
                     confirmpassword: "",
-                    countrycode: "",
+                    countrycode: "India +91",
                     number: "",
                   }}
                   validate={(values) => {
@@ -58,9 +65,10 @@ class Register extends Component {
                     ) {
                       errors.email = "Invalid email address **";
                     }
-                    // if (!values.number) {
-                    //   errors.number = " number required **";
-                    // }
+
+                    if (!values.number) {
+                      errors.number = " number required **";
+                    }
 
                     const strongRegex = new RegExp(
                       "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{10,})"
@@ -83,27 +91,34 @@ class Register extends Component {
                     return errors;
                   }}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
+                    this.setState({ showsnipper: true });
                     //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
+                    let numberformat = values.countrycode + "-" + values.number;
                     const reqdata = {
                       firstname: values.firstname,
                       lastname: values.lastname,
                       email: values.email,
-                      number: values.number,
+                      number: numberformat,
                       password: values.password,
                       confirmpassword: values.confirmpassword,
                     };
+
+                    //console.log(reqdata);
+                    //return false;
                     this.props.register(reqdata, (response) => {
                       //console.log(response);
                       //console.log(response.status);
                       if (response.status === 200) {
                         toast.success("Email allready registred");
+                        this.setState({ showsnipper: false });
                       } else if (response.status === 201) {
                         this.props.emailstore(values.email, (res) => {});
                         toast.success("Registration Successfull !");
-                        Navigate("/loginpage");
+                        this.setState({ showsnipper: false });
                         resetForm({ values: "" });
+                        Navigate("/loginpage");
                       }
                       if (response.status === 500) {
                         toast.success("server not responding");
@@ -194,12 +209,70 @@ class Register extends Component {
                         </span>
                       </FormControl>
 
-                      {/* <HStack>
-                        <FormControl id="number" mt={2}>
+                      <HStack>
+                        {/* <FormControl id="numbers" mt={2}>
                           <FormLabel>Phone Number</FormLabel>
-                          <PhoneInput country={"in"} value={values.number} />
-                        </FormControl>
-                      </HStack> */}
+                          <PhoneInput
+                            country={"in"}
+                            type="text"
+                            value={values.number}
+                            name="number"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </FormControl> */}
+                        <Box mt={3}>
+                          <FormControl id="firstName">
+                            <FormLabel>Country Code</FormLabel>
+                            <select
+                              name="countrycode"
+                              value={values.countrycode}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{
+                                width: "127px",
+                                height: "37px",
+                                border: "1px solid #97a99c3b",
+                              }}
+                            >
+                              {calling_code.map((item, key) => {
+                                return (
+                                  <option
+                                    key={key}
+                                    value={item.code}
+                                    label={item.name + " " + item.code}
+                                  >
+                                    {item.name + " " + item.code}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </FormControl>
+                          <span
+                            style={{
+                              color: "red",
+                              fontSize: "13px",
+                              paddingBottom: "10px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {errors.number && touched.number && errors.number}
+                          </span>
+                        </Box>
+                        <Box>
+                          <FormControl mt={3} id="lastName">
+                            <FormLabel>Mobile Number</FormLabel>
+                            <Input
+                              width={"100%"}
+                              type="text"
+                              name="number"
+                              value={values.number}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </FormControl>
+                        </Box>
+                      </HStack>
 
                       <FormControl id="password" mt={2}>
                         <FormLabel>Password</FormLabel>
@@ -256,6 +329,15 @@ class Register extends Component {
                           disabled={isSubmitting}
                         >
                           SignUp
+                          {this.state.showsnipper === true ? (
+                            <Spinner
+                              color="white.500"
+                              size="sm"
+                              style={{ marginLeft: "10px" }}
+                            />
+                          ) : (
+                            ""
+                          )}
                         </Button>
                       </Stack>
                       <Stack pt={1}>

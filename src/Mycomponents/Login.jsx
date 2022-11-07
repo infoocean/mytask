@@ -9,6 +9,7 @@ import {
   Button,
   Heading,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
@@ -21,8 +22,11 @@ class Login extends Component {
   constructor(props) {
     super(props);
   }
+  state = {
+    showsnipper: false,
+  };
   render() {
-    console.log(this.props.userLoginReducer.userInfo);
+    //console.log(this.props.userLoginReducer.userInfo);
 
     return (
       <>
@@ -58,6 +62,7 @@ class Login extends Component {
                     return errors;
                   }}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
+                    this.setState({ showsnipper: true });
                     //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
@@ -69,8 +74,10 @@ class Login extends Component {
                       if (response.status === 200) {
                         toast.success("Login Successfull !");
                         resetForm({ values: "" });
+                        this.setState({ showsnipper: false });
                       } else {
                         toast.success("invalid crendentials!");
+                        this.setState({ showsnipper: false });
                         //resetForm({ values: "" });
                       }
                     });
@@ -141,6 +148,15 @@ class Login extends Component {
                           disabled={isSubmitting}
                         >
                           Login
+                          {this.state.showsnipper === true ? (
+                            <Spinner
+                              color="white.500"
+                              size="sm"
+                              style={{ marginLeft: "10px" }}
+                            />
+                          ) : (
+                            ""
+                          )}
                         </Button>
                       </Stack>
                       <Stack pt={1}>
