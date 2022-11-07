@@ -7,8 +7,8 @@ import {
 } from "../Constant/usercontant";
 
 const server_root = process.env.BASE_URL_SERVER;
-loginendpoint = "userlogin";
-registrationendpoint = "usersignup";
+const loginendpoint = "userlogin";
+const registrationendpoint = "usersignup";
 
 export const login = (data, callback) => {
   const request = axios.post(server_root + loginendpoint, data);
