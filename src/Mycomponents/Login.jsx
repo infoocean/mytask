@@ -26,7 +26,7 @@ class Login extends Component {
     showsnipper: false,
   };
   render() {
-    //console.log(this.props.userLoginReducer.userInfo);
+    console.log(this.props.userLoginReducer.userInfo);
 
     return (
       <>

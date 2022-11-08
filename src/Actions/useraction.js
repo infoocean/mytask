@@ -1,20 +1,16 @@
 import axios from "axios";
-import env from "react-dotenv";
 import {
   USER_LOGIN_SUCCESS,
   USER_REGISTER_SUCCESS,
   EMAIL_SAVE,
 } from "../Constant/usercontant";
 
-const server_root = process.env.BASE_URL_SERVER;
+const server_root = process.env.REACT_APP_BASE_URL;
 const loginendpoint = "userlogin";
 const registrationendpoint = "usersignup";
 
 export const login = (data, callback) => {
-  const request = axios.post(
-    "https://mytaskbackendserver.herokuapp.com/" + loginendpoint,
-    data
-  );
+  const request = axios.post("https://mytaskbackendserver.herokuapp.com/" + loginendpoint, data);
   return (dispatch) => {
     request
       .then((res) => {

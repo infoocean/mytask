@@ -12,7 +12,7 @@ import {
   HStack,
   Spinner,
 } from "@chakra-ui/react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { register, emailstore } from "../Actions/useraction";
 import { connect } from "react-redux";
@@ -27,7 +27,6 @@ class Register extends Component {
   state = {
     showsnipper: false,
   };
-
   render() {
     return (
       <>
@@ -66,8 +65,11 @@ class Register extends Component {
                       errors.email = "Invalid email address **";
                     }
 
+                    const numregx = new RegExp("^[6-9]");
                     if (!values.number) {
                       errors.number = " number required **";
+                    } else if (!values.number.match(numregx)) {
+                      errors.number = "enter valid number **";
                     }
 
                     const strongRegex = new RegExp(
@@ -118,7 +120,6 @@ class Register extends Component {
                         toast.success("Registration Successfull !");
                         this.setState({ showsnipper: false });
                         resetForm({ values: "" });
-                        Navigate("/loginpage");
                       }
                       if (response.status === 500) {
                         this.setState({ showsnipper: false });
