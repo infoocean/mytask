@@ -11,6 +11,7 @@ import {
   Text,
   HStack,
   Spinner,
+  Spacer,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
@@ -19,15 +20,28 @@ import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { calling_code } from "../API/countrycodes";
-
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 class Register extends Component {
-  state = {
-    showsnipper: false,
+  constructor() {
+    super();
+    this.state = {
+      showsnipper: false,
+      number: "",
+      number_val: "",
+      country_code: "",
+    };
+  }
+  handleOnChange = (value, data, event, formattedValue) => {
+    //console.log(data.dialCode);
+    //console.log(value.slice(data.dialCode.length));
+    //this.setState({ number: value });
+    this.setState({ country_code: data.dialCode });
+    this.setState({ number_val: value.slice(data.dialCode.length) });
   };
   render() {
+    //console.log(this.state.number);
     return (
       <>
         <Flex minH={"90vh"} align={"center"} justify={"center"}>
@@ -65,11 +79,16 @@ class Register extends Component {
                       errors.email = "Invalid email address **";
                     }
 
-                    const numregx = new RegExp("^[6-9]");
-                    if (!values.number) {
+                    // const numregx = new RegExp("^[6-9]");
+                    // if (!this.state.number) {
+                    //   errors.number = " number feild is mandatory **";
+                    // }
+                    // } else if (!this.state.number.match(numregx)) {
+                    //   errors.number = " plese enter valid number **";
+                    // }
+
+                    if (!this.state.number_val) {
                       errors.number = " number feild is mandatory **";
-                    } else if (!values.number.match(numregx)) {
-                      errors.number = " plese enter valid number **";
                     }
 
                     const strongRegex = new RegExp(
@@ -97,7 +116,12 @@ class Register extends Component {
                     //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
-                    let numberformat = values.countrycode + "-" + values.number;
+                    // let numberformat = values.countrycode + "-" + values.number;
+                    let numberformat =
+                      "+" +
+                      this.state.country_code +
+                      "-" +
+                      this.state.number_val;
                     const reqdata = {
                       firstname: values.firstname,
                       lastname: values.lastname,
@@ -106,7 +130,6 @@ class Register extends Component {
                       password: values.password,
                       confirmpassword: values.confirmpassword,
                     };
-
                     //console.log(reqdata);
                     //return false;
                     this.props.register(reqdata, (response) => {
@@ -152,18 +175,6 @@ class Register extends Component {
                               onBlur={handleBlur}
                               value={values.firstname}
                             />
-                            <span
-                              style={{
-                                color: "red",
-                                fontSize: "13px",
-                                paddingBottom: "10px",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {errors.firstname &&
-                                touched.firstname &&
-                                errors.firstname}
-                            </span>
                           </FormControl>
                         </Box>
                         <Box>
@@ -176,6 +187,12 @@ class Register extends Component {
                               onBlur={handleBlur}
                               value={values.lastname}
                             />
+                          </FormControl>
+                        </Box>
+                      </HStack>
+                      <Stack>
+                        <Flex>
+                          <Box>
                             <span
                               style={{
                                 color: "red",
@@ -184,13 +201,29 @@ class Register extends Component {
                                 fontWeight: "bold",
                               }}
                             >
+                              {errors.firstname &&
+                                touched.firstname &&
+                                errors.firstname}
+                            </span>
+                          </Box>
+                          <Spacer />
+                          <Box>
+                            <span
+                              style={{
+                                color: "red",
+                                fontSize: "13px",
+                                paddingBottom: "10px",
+                                fontWeight: "bold",
+                                paddingRight: "88px",
+                              }}
+                            >
                               {errors.lastname &&
                                 touched.lastname &&
                                 errors.lastname}
                             </span>
-                          </FormControl>
-                        </Box>
-                      </HStack>
+                          </Box>
+                        </Flex>
+                      </Stack>
                       <FormControl id="email" mt={2}>
                         <FormLabel>Email address</FormLabel>
                         <Input
@@ -213,21 +246,23 @@ class Register extends Component {
                       </FormControl>
 
                       <HStack>
-                        {/* <FormControl id="numbers" mt={2}>
+                        <FormControl id="numbers" mt={2}>
                           <FormLabel>Phone Number</FormLabel>
+                          {/* <PhoneInput
+                            country={"us"}
+                            value={this.state.number}
+                            onChange={(number) => this.setState({ number })}
+                          /> */}
                           <PhoneInput
-                            country={"in"}
-                            type="text"
-                            value={values.number}
-                            name="number"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
+                            country={"us"}
+                            value={this.state.number}
+                            onChange={this.handleOnChange}
                           />
-                        </FormControl> */}
-                        <HStack>
+                        </FormControl>
+                        {/* <HStack>
                           <Box mt={3}>
                             <FormControl id="firstName">
-                              <FormLabel>Country Code</FormLabel>
+                              <FormLabel>Mobile Number</FormLabel>
                               <select
                                 name="countrycode"
                                 value={values.countrycode}
@@ -255,18 +290,27 @@ class Register extends Component {
                           </Box>
                           <Box>
                             <FormControl mt={3} id="lastName">
-                              <FormLabel>Mobile Number</FormLabel>
+                              <FormLabel></FormLabel>
                               <Input
                                 width={"100%"}
                                 type="text"
                                 name="number"
-                                value={values.number}
+                                value={" " + values.countrycode + values.number}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                style={{
+                                  marginLeft: "-3%",
+                                  borderLeft: "none",
+                                  paddingLeft: "0%",
+                                  height: "37px",
+                                  borderRadius: "unset",
+                                  marginTop: "31px",
+                                  width: "278px",
+                                }}
                               />
                             </FormControl>
                           </Box>
-                        </HStack>
+                        </HStack> */}
                       </HStack>
                       <Stack>
                         <span
