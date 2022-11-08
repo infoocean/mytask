@@ -10,7 +10,10 @@ const loginendpoint = "userlogin";
 const registrationendpoint = "usersignup";
 
 export const login = (data, callback) => {
-  const request = axios.post("https://mytaskbackendserver.herokuapp.com/" + loginendpoint, data);
+  const request = axios.post(
+    "https://mytaskbackendserver.herokuapp.com/" + loginendpoint,
+    data
+  );
   return (dispatch) => {
     request
       .then((res) => {

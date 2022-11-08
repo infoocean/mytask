@@ -67,9 +67,9 @@ class Register extends Component {
 
                     const numregx = new RegExp("^[6-9]");
                     if (!values.number) {
-                      errors.number = " number required **";
+                      errors.number = " number feild is required **";
                     } else if (!values.number.match(numregx)) {
-                      errors.number = "enter valid number **";
+                      errors.number = " plese enter valid number **";
                     }
 
                     const strongRegex = new RegExp(
@@ -224,58 +224,62 @@ class Register extends Component {
                             onBlur={handleBlur}
                           />
                         </FormControl> */}
-                        <Box mt={3}>
-                          <FormControl id="firstName">
-                            <FormLabel>Country Code</FormLabel>
-                            <select
-                              name="countrycode"
-                              value={values.countrycode}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              style={{
-                                width: "127px",
-                                height: "37px",
-                                border: "1px solid #97a99c3b",
-                              }}
-                            >
-                              {calling_code.map((item, key) => {
-                                return (
-                                  <option
-                                    key={key}
-                                    value={item.code}
-                                    label={item.name + " " + item.code}
-                                  >
-                                    {item.name + " " + item.code}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                          </FormControl>
-                          <span
-                            style={{
-                              color: "red",
-                              fontSize: "13px",
-                              paddingBottom: "10px",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {errors.number && touched.number && errors.number}
-                          </span>
-                        </Box>
-                        <Box>
-                          <FormControl mt={3} id="lastName">
-                            <FormLabel>Mobile Number</FormLabel>
-                            <Input
-                              width={"100%"}
-                              type="text"
-                              name="number"
-                              value={values.number}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                          </FormControl>
-                        </Box>
+                        <HStack>
+                          <Box mt={3}>
+                            <FormControl id="firstName">
+                              <FormLabel>Country Code</FormLabel>
+                              <select
+                                name="countrycode"
+                                value={values.countrycode}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                style={{
+                                  width: "127px",
+                                  height: "37px",
+                                  border: "1px solid #97a99c3b",
+                                }}
+                              >
+                                {calling_code.map((item, key) => {
+                                  return (
+                                    <option
+                                      key={key}
+                                      value={item.code}
+                                      label={item.name + " " + item.code}
+                                    >
+                                      {item.name + " " + item.code}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </FormControl>
+                          </Box>
+                          <Box>
+                            <FormControl mt={3} id="lastName">
+                              <FormLabel>Mobile Number</FormLabel>
+                              <Input
+                                width={"100%"}
+                                type="text"
+                                name="number"
+                                value={values.number}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </FormControl>
+                          </Box>
+                        </HStack>
                       </HStack>
+                      <Stack>
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "13px",
+                            paddingBottom: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {errors.number && touched.number && errors.number}
+                        </span>
+                      </Stack>
 
                       <FormControl id="password" mt={2}>
                         <FormLabel>Password</FormLabel>
