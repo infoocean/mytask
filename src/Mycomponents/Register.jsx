@@ -67,7 +67,7 @@ class Register extends Component {
 
                     const numregx = new RegExp("^[6-9]");
                     if (!values.number) {
-                      errors.number = " number feild is required **";
+                      errors.number = " number feild is mandatory **";
                     } else if (!values.number.match(numregx)) {
                       errors.number = " plese enter valid number **";
                     }
