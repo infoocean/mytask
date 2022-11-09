@@ -13,7 +13,8 @@ import {
   Spinner,
   Spacer,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { Formik } from "formik";
 import { register, emailstore } from "../Actions/useraction";
 import { connect } from "react-redux";
@@ -24,8 +25,8 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 class Register extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showsnipper: false,
       number: "",
@@ -40,6 +41,7 @@ class Register extends Component {
     this.setState({ country_code: data.dialCode });
     this.setState({ number_val: value.slice(data.dialCode.length) });
   };
+
   render() {
     //console.log(this.state.number);
     return (
@@ -143,12 +145,23 @@ class Register extends Component {
                         toast.success("Registration Successfull !");
                         this.setState({ showsnipper: false });
                         resetForm({ values: "" });
+                        setTimeout(() => {
+                          this.props.history.push("/loginpage");
+                        }, "2000");
                       }
                       if (response.status === 500) {
                         this.setState({ showsnipper: false });
                         toast.success("server not responding");
                       }
                       this.setState({ showsnipper: false });
+                      //window.location.replace("loginpage");
+                      //<Navigate to="/loginpage" replace={true} />;
+                      //redirect("/loginpage");
+                      // if (this.props.redirect_url === true) {
+
+                      // }
+                      //<Redirect to="/users" />;
+                      //console.log("run");
                     });
                     setSubmitting(false);
                   }}

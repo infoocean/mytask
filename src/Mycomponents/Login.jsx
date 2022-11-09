@@ -26,7 +26,18 @@ class Login extends Component {
     showsnipper: false,
   };
   render() {
-    console.log(this.props.userLoginReducer.userInfo);
+    let autofillemail;
+    if (
+      this.props &&
+      this.props.userLoginReducer &&
+      this.props.userLoginReducer.userInfo &&
+      this.props.userLoginReducer.userInfo.savedata &&
+      this.props.userLoginReducer.userInfo.savedata.email
+    ) {
+      autofillemail = this.props.userLoginReducer.userInfo.savedata.email;
+    } else {
+      autofillemail = "";
+    }
 
     return (
       <>
@@ -39,7 +50,7 @@ class Login extends Component {
               <Stack spacing={4}>
                 <Formik
                   initialValues={{
-                    email: this.props.userLoginReducer.userInfo,
+                    email: autofillemail,
                     password: "",
                   }}
                   validate={(values) => {

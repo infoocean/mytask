@@ -1,18 +1,20 @@
 import "./App.css";
 import Login from "./Mycomponents/Login";
-import Register from "./Mycomponents/Register";
-import { Routes, Route } from "react-router-dom";
+
+import { Switch, Route } from "react-router-dom";
+
 import Number from "./test";
+import Register from "./Mycomponents/Register";
 
 function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/loginpage" element={<Login />} />
-        <Route path="/registrationpage" element={<Register />} />
-        <Route path="/number" element={<Number />} />
-      </Routes>
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route exact path="/loginpage" component={Login} />
+        <Route exact path="/registrationpage" component={Register}/>
+        <Route exact path="/number" component={Number} />
+      </Switch>
     </div>
   );
 }
