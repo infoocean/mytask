@@ -13,11 +13,11 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
-import { login } from "../Actions/useraction";
-import { emailstore } from "../Actions/useraction";
-import { connect } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { login } from "../Redux/Actions/useraction";
+import { connect } from "react-redux";
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +74,6 @@ class Login extends Component {
                   }}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     this.setState({ showsnipper: true });
-                    //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
                     const reqdata = {
@@ -86,10 +85,11 @@ class Login extends Component {
                         toast.success("Login Successfull !");
                         resetForm({ values: "" });
                         this.setState({ showsnipper: false });
-                      } else {
+                      } else if(response.status = 400) {
                         toast.success("invalid crendentials!");
                         this.setState({ showsnipper: false });
-                        //resetForm({ values: "" });
+                      }else{
+                        toast.success("server problem server not responding");
                       }
                       this.setState({ showsnipper: false });
                     });
@@ -104,7 +104,6 @@ class Login extends Component {
                     handleBlur,
                     handleSubmit,
                     isSubmitting,
-                    /* and other goodies */
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <FormControl id="email" mt={2}>
@@ -200,5 +199,4 @@ const mapDispatchToProps = (store) => {
 
 export default connect(mapDispatchToProps, {
   login,
-  emailstore,
 })(Login);

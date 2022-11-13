@@ -13,14 +13,12 @@ import {
   Spinner,
   Spacer,
 } from "@chakra-ui/react";
-import { Link, Navigate } from "react-router-dom";
-import { redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik } from "formik";
-import { register, emailstore } from "../Actions/useraction";
+import { register } from "../Redux/Actions/useraction";
 import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { calling_code } from "../API/countrycodes";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
@@ -60,8 +58,8 @@ class Register extends Component {
                     email: "",
                     password: "",
                     confirmpassword: "",
-                    countrycode: "+91",
                     number: "",
+                    dob : ""
                   }}
                   validate={(values) => {
                     const errors = {};
@@ -80,19 +78,9 @@ class Register extends Component {
                     ) {
                       errors.email = "Invalid email address **";
                     }
-
-                    // const numregx = new RegExp("^[6-9]");
-                    // if (!this.state.number) {
-                    //   errors.number = " number feild is mandatory **";
-                    // }
-                    // } else if (!this.state.number.match(numregx)) {
-                    //   errors.number = " plese enter valid number **";
-                    // }
-
                     if (!this.state.number_val) {
                       errors.number = " number feild is mandatory **";
                     }
-
                     const strongRegex = new RegExp(
                       "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{10,})"
                     );
@@ -111,14 +99,15 @@ class Register extends Component {
                           "password and confirm password are not match **";
                       }
                     }
+                    if(!values.dob){
+                        errors.dob = "required feild**";
+                    }
                     return errors;
                   }}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     this.setState({ showsnipper: true });
-                    //setshowsnipper(true);
                     //console.log(values);
                     //alert(JSON.stringify(values, null, 2));
-                    // let numberformat = values.countrycode + "-" + values.number;
                     let numberformat =
                       "+" +
                       this.state.country_code +
@@ -133,7 +122,6 @@ class Register extends Component {
                       confirmpassword: values.confirmpassword,
                     };
                     //console.log(reqdata);
-                    //return false;
                     this.props.register(reqdata, (response) => {
                       //console.log(response);
                       //console.log(response.status);
@@ -154,14 +142,6 @@ class Register extends Component {
                         toast.success("server not responding");
                       }
                       this.setState({ showsnipper: false });
-                      //window.location.replace("loginpage");
-                      //<Navigate to="/loginpage" replace={true} />;
-                      //redirect("/loginpage");
-                      // if (this.props.redirect_url === true) {
-
-                      // }
-                      //<Redirect to="/users" />;
-                      //console.log("run");
                     });
                     setSubmitting(false);
                   }}
@@ -174,7 +154,6 @@ class Register extends Component {
                     handleBlur,
                     handleSubmit,
                     isSubmitting,
-                    /* and other goodies */
                   }) => (
                     <form onSubmit={handleSubmit}>
                       <HStack>
@@ -257,73 +236,15 @@ class Register extends Component {
                           {errors.email && touched.email && errors.email}
                         </span>
                       </FormControl>
-
                       <HStack>
                         <FormControl id="numbers" mt={2}>
                           <FormLabel>Phone Number</FormLabel>
-                          {/* <PhoneInput
-                            country={"us"}
-                            value={this.state.number}
-                            onChange={(number) => this.setState({ number })}
-                          /> */}
                           <PhoneInput
                             country={"us"}
                             value={this.state.number}
                             onChange={this.handleOnChange}
                           />
                         </FormControl>
-                        {/* <HStack>
-                          <Box mt={3}>
-                            <FormControl id="firstName">
-                              <FormLabel>Mobile Number</FormLabel>
-                              <select
-                                name="countrycode"
-                                value={values.countrycode}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                style={{
-                                  width: "127px",
-                                  height: "37px",
-                                  border: "1px solid #97a99c3b",
-                                }}
-                              >
-                                {calling_code.map((item, key) => {
-                                  return (
-                                    <option
-                                      key={key}
-                                      value={item.code}
-                                      label={item.name + " " + item.code}
-                                    >
-                                      {item.name + " " + item.code}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                            </FormControl>
-                          </Box>
-                          <Box>
-                            <FormControl mt={3} id="lastName">
-                              <FormLabel></FormLabel>
-                              <Input
-                                width={"100%"}
-                                type="text"
-                                name="number"
-                                value={" " + values.countrycode + values.number}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                style={{
-                                  marginLeft: "-3%",
-                                  borderLeft: "none",
-                                  paddingLeft: "0%",
-                                  height: "37px",
-                                  borderRadius: "unset",
-                                  marginTop: "31px",
-                                  width: "278px",
-                                }}
-                              />
-                            </FormControl>
-                          </Box>
-                        </HStack> */}
                       </HStack>
                       <Stack>
                         <span
@@ -337,7 +258,6 @@ class Register extends Component {
                           {errors.number && touched.number && errors.number}
                         </span>
                       </Stack>
-
                       <FormControl id="password" mt={2}>
                         <FormLabel>Password</FormLabel>
                         <Input
@@ -380,6 +300,28 @@ class Register extends Component {
                           {errors.confirmpassword &&
                             touched.confirmpassword &&
                             errors.confirmpassword}
+                        </span>
+                      </FormControl>
+                      <FormControl id="dob" mt={2}>
+                        <FormLabel>Date Of Birth</FormLabel>
+                        <Input
+                          type="date"
+                          name="dob"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.dob}
+                        />
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "13px",
+                            paddingBottom: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {errors.dob &&
+                            touched.dob &&
+                            errors.dob}
                         </span>
                       </FormControl>
                       <Stack spacing={10} mt={3}>
@@ -432,5 +374,4 @@ const mapDispatchToProps = (store) => {
 };
 export default connect(mapDispatchToProps, {
   register,
-  emailstore,
 })(Register);

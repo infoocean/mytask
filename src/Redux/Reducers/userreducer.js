@@ -1,8 +1,7 @@
 import {
   USER_LOGIN_SUCCESS,
   USER_REGISTER_SUCCESS,
-  EMAIL_SAVE,
-} from "../../Constant/usercontant";
+} from "../Constants/userconstant";
 
 export const userLoginReducer = (state = {}, action) => {
   const { type, payload } = action;
@@ -10,8 +9,6 @@ export const userLoginReducer = (state = {}, action) => {
     case USER_LOGIN_SUCCESS:
       return { loading: false, userInfo: action.payload };
     case USER_REGISTER_SUCCESS:
-      return { loading: false, userInfo: action.payload };
-    case EMAIL_SAVE:
       return { loading: false, userInfo: action.payload };
     default:
       return state;

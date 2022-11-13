@@ -1,9 +1,6 @@
-import "./App.css";
-import Login from "./Mycomponents/Login";
-
+import React from 'react';
 import { Switch, Route } from "react-router-dom";
-
-import Number from "./test";
+import Login from "./Mycomponents/Login";
 import Register from "./Mycomponents/Register";
 
 function App() {
@@ -13,7 +10,6 @@ function App() {
         <Route exact path="/" component={Login} />
         <Route exact path="/loginpage" component={Login} />
         <Route exact path="/registrationpage" component={Register}/>
-        <Route exact path="/number" component={Number} />
       </Switch>
     </div>
   );
