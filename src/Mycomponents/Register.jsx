@@ -21,6 +21,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { CountryDropdown,RegionDropdown } from 'react-country-region-selector';
 
 class Register extends Component {
   constructor(props) {
@@ -59,7 +60,9 @@ class Register extends Component {
                     password: "",
                     confirmpassword: "",
                     number: "",
-                    dob : ""
+                    dob : "",
+                    country:"",
+                    state:""
                   }}
                   validate={(values) => {
                     const errors = {};
@@ -102,12 +105,21 @@ class Register extends Component {
                     if(!values.dob){
                         errors.dob = "required feild**";
                     }
+
+                    if(!values.country){
+                      errors.country = "required feild";
+                    }
+
+                    if(!values.state){
+                      errors.state = "required feild";
+                    }
+
                     return errors;
                   }}
                   onSubmit={async (values, { setSubmitting, resetForm }) => {
                     this.setState({ showsnipper: true });
                     //console.log(values);
-                    //alert(JSON.stringify(values, null, 2));
+                    alert(JSON.stringify(values, null, 2));
                     let numberformat =
                       "+" +
                       this.state.country_code +
@@ -324,6 +336,58 @@ class Register extends Component {
                             errors.dob}
                         </span>
                       </FormControl>
+                      <FormControl id="dob" mt={2}>
+                        <FormLabel>Country</FormLabel>
+                        {/* 
+                        width: 400px;
+    border: 0.5px solid #d0dfe3;
+    height: 44px;
+    border-radius: 5px; */}
+                        <CountryDropdown name="country"
+                        defaultOptionLabel="Select a country" value={values.country}
+                      onChange={(_, e) => handleChange(e)} onBlur={handleBlur} />
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "13px",
+                            paddingBottom: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {errors.country &&
+                            touched.country &&
+                            errors.country}
+                        </span>
+                      </FormControl>
+                      <FormControl id="dob" mt={2}>
+                        <FormLabel>State</FormLabel>
+{/* 
+                        width: 400px;
+    border: 0.5px solid #d0dfe3;
+    height: 44px;
+    border-radius: 5px; */}
+                        <RegionDropdown
+                         name="state"
+                        defaultOptionLabel="select a state" blankOptionLabel="Select a state" country={values.country} value={values.state}
+                    onChange={(_, e) => handleChange(e)} onBlur={handleBlur} 
+                     />
+                        <span
+                          style={{
+                            color: "red",
+                            fontSize: "13px",
+                            paddingBottom: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {errors.state &&
+                            touched.state &&
+                            errors.state}
+                        </span>
+                      </FormControl>
+                     
+
+                  
+		
                       <Stack spacing={10} mt={3}>
                         <Button
                           type="submit"
