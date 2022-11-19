@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from "react-router-dom";
+import Login from './Mycomponents/Auth/Login';
+import Register from './Mycomponents/Auth/Register';
 import HomePage from './Mycomponents/HomeComp/Homepage';
-import Login from "./Mycomponents/Login";
-import Register from "./Mycomponents/Register";
 
 function App() {
   return (

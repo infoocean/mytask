@@ -15,8 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
-import { register } from "../Redux/Actions/useraction";
-import { connect } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PhoneInput from "react-phone-input-2";
@@ -31,6 +29,7 @@ class Register extends Component {
       number: "",
       number_val: "",
       country_code: "",
+      number_error:"",
     };
   }
   handleOnChange = (value, data, event, formattedValue) => {
@@ -39,10 +38,21 @@ class Register extends Component {
     //this.setState({ number: value });
     this.setState({ country_code: data.dialCode });
     this.setState({ number_val: value.slice(data.dialCode.length) });
+    if(this.state.number_val===''){
+      this.setState({number_error:"number feild is mandatory**"});
+    }else{
+      this.setState({number_error:""});
+    }
   };
+  handleOnBlur  = (e)=>{
+    if(this.state.number_val===''){
+      this.setState({number_error:"number feild is mandatory**"});
+    }else{
+      this.setState({number_error:""});
+    }
+  }
 
   render() {
-    //console.log(this.state.number);
     return (
       <>
         <Flex minH={"90vh"} align={"center"} justify={"center"}>
@@ -132,29 +142,12 @@ class Register extends Component {
                       number: numberformat,
                       password: values.password,
                       confirmpassword: values.confirmpassword,
+                      dob:values.dob,
+                      country:values.country,
+                      state:values.state
                     };
-                    //console.log(reqdata);
-                    this.props.register(reqdata, (response) => {
-                      //console.log(response);
-                      //console.log(response.status);
-                      if (response.status === 200) {
-                        toast.success("Email allready registred");
-                        this.setState({ showsnipper: false });
-                      } else if (response.status === 201) {
-                        this.props.emailstore(values.email, (res) => {});
-                        toast.success("Registration Successfull !");
-                        this.setState({ showsnipper: false });
-                        resetForm({ values: "" });
-                        setTimeout(() => {
-                          this.props.history.push("/loginpage");
-                        }, "2000");
-                      }
-                      if (response.status === 500) {
-                        this.setState({ showsnipper: false });
-                        toast.success("server not responding");
-                      }
-                      this.setState({ showsnipper: false });
-                    });
+                    console.log(reqdata);
+                    
                     setSubmitting(false);
                   }}
                 >
@@ -255,6 +248,7 @@ class Register extends Component {
                             country={"us"}
                             value={this.state.number}
                             onChange={this.handleOnChange}
+                            onBlur={this.handleOnBlur}
                           />
                         </FormControl>
                       </HStack>
@@ -267,7 +261,8 @@ class Register extends Component {
                             fontWeight: "bold",
                           }}
                         >
-                          {errors.number && touched.number && errors.number}
+                          {errors.number && touched.number && errors.number || this.state.number_error}
+                         
                         </span>
                       </Stack>
                       <FormControl id="password" mt={2}>
@@ -336,16 +331,12 @@ class Register extends Component {
                             errors.dob}
                         </span>
                       </FormControl>
-                      <FormControl id="dob" mt={2}>
+                      <FormControl id="country" mt={2}>
                         <FormLabel>Country</FormLabel>
-                        {/* 
-                        width: 400px;
-    border: 0.5px solid #d0dfe3;
-    height: 44px;
-    border-radius: 5px; */}
                         <CountryDropdown name="country"
                         defaultOptionLabel="Select a country" value={values.country}
-                      onChange={(_, e) => handleChange(e)} onBlur={handleBlur} />
+                      onChange={(_, e) => handleChange(e)} onBlur={handleBlur}
+                      style={{width:"400px", height:"44px", borderRadius:"4px", border:"0.5px solid #d0dfe3 "}} />
                         <span
                           style={{
                             color: "red",
@@ -359,17 +350,13 @@ class Register extends Component {
                             errors.country}
                         </span>
                       </FormControl>
-                      <FormControl id="dob" mt={2}>
+                      <FormControl id="state" mt={2}>
                         <FormLabel>State</FormLabel>
-{/* 
-                        width: 400px;
-    border: 0.5px solid #d0dfe3;
-    height: 44px;
-    border-radius: 5px; */}
                         <RegionDropdown
                          name="state"
                         defaultOptionLabel="select a state" blankOptionLabel="Select a state" country={values.country} value={values.state}
                     onChange={(_, e) => handleChange(e)} onBlur={handleBlur} 
+                    style={{width:"400px", height:"44px", borderRadius:"4px", border:"0.5px solid #d0dfe3 "}}
                      />
                         <span
                           style={{
@@ -432,10 +419,5 @@ class Register extends Component {
     );
   }
 }
-const mapDispatchToProps = (store) => {
-  var registerData = store;
-  return registerData;
-};
-export default connect(mapDispatchToProps, {
-  register,
-})(Register);
+
+export default Register;

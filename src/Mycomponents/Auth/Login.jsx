@@ -15,8 +15,7 @@ import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { login } from "../Redux/Actions/useraction";
-import { connect } from "react-redux";
+
 
 class Login extends Component {
   constructor(props) {
@@ -80,19 +79,8 @@ class Login extends Component {
                       email: values.email,
                       password: values.password,
                     };
-                    this.props.login(reqdata, (response) => {
-                      if (response.status === 200) {
-                        toast.success("Login Successfull !");
-                        resetForm({ values: "" });
-                        this.setState({ showsnipper: false });
-                      } else if(response.status = 400) {
-                        toast.success("invalid crendentials!");
-                        this.setState({ showsnipper: false });
-                      }else{
-                        toast.success("server problem server not responding");
-                      }
-                      this.setState({ showsnipper: false });
-                    });
+                    console.log(reqdata);
+                    
                     setSubmitting(false);
                   }}
                 >
@@ -192,11 +180,6 @@ class Login extends Component {
     );
   }
 }
-const mapDispatchToProps = (store) => {
-  var registerData = store;
-  return registerData;
-};
 
-export default connect(mapDispatchToProps, {
-  login,
-})(Login);
+
+export default Login;
